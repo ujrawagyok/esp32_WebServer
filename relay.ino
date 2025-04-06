@@ -23,15 +23,22 @@ void setup() {
 
   Serial.begin(115200);   
   WiFi.begin(ssid, password);
+  lcd.init();
+  lcd.backlight();
 
   while(WiFi.status() != WL_CONNECTED){           // Kapcsolódás a hálózathoz
     delay(1000);
     Serial.println("Kapcsolódás a hálózathoz...");
+    lcd.setCursor(0,0);
+    lcd.print("Kapcsolodas");
   }
 
   Serial.println("Kapcsolódva a hálózathoz!");
   Serial.print("AZ ESP32 Web szerver IP címe: ");
   Serial.println(WiFi.localIP());
+  lcd.clear();
+  lcd.setCursor(0,1);
+  lcd.print("Kapcsolodva");
 
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     String html = "<!DOCTYPE html><html><head><meta charset='UTF-8'>";
@@ -97,8 +104,41 @@ void setup() {
   });
 
   server.begin();    // A szerver indítása
+  lcd.clear();
 }
 
 void loop() {
   
+  if(digitalRead(19)){
+    lcd.setCursor(0,0);
+    lcd.print("IN1: L");
+  }
+  else{
+    lcd.setCursor(0,0);
+    lcd.print("IN1: H");
+  }
+  if(digitalRead(18)){
+    lcd.setCursor(0,1);
+    lcd.print("IN2: L");
+  }
+  else{
+    lcd.setCursor(0,1);
+    lcd.print("IN2: H");
+  }
+  if(digitalRead(17)){
+    lcd.setCursor(8,0);
+    lcd.print("IN3: L");
+  }
+  else{
+    lcd.setCursor(8,0);
+    lcd.print("IN3: H");
+  }
+  if(digitalRead(16)){
+    lcd.setCursor(8,1);
+    lcd.print("IN4: L");
+  }
+  else{
+    lcd.setCursor(8,1);
+    lcd.print("IN4: H");
+  }
 }
